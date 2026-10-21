@@ -2,19 +2,30 @@
 import { useCarritoStore } from '../store/useCarritoStore'
 
 function Encabezado() {
-  // Obtenemos los productos del store
   const items = useCarritoStore((state) => state.items)
 
-  // Sumamos las cantidades de los productos
   const totalUnidades = items.reduce(
-    (suma, item) => suma + item.cantidad,
+    (total, item) => total + item.cantidad,
     0
   )
 
   return (
     <header className="encabezado">
-      <h1>Mi Tienda</h1>
-      <span className="insignia">{totalUnidades}</span>
+      <div className="marca">
+        <div className="marca-icono"></div>
+
+        <div>
+          <h1>Verde Market</h1>
+          <p>Tu próxima compra empieza aquí</p>
+        </div>
+      </div>
+
+      <div className="carrito-indicador">
+        <span role="img" aria-label="Carrito">
+        </span>
+
+        <span>{totalUnidades}</span>
+      </div>
     </header>
   )
 }
