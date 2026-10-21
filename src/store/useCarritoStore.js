@@ -1,10 +1,13 @@
 
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 // Creamos el estado global del carrito
-export const useCarritoStore = create((set) => ({
-  // Aquí se guardan los productos agregados
-  items: [],
+export const useCarritoStore = create(
+  persist(
+    (set) => ({
+      // Aquí se guardan los productos agregados
+      items: [],
 
   // Agrega un producto al carrito
   agregarProducto: (producto) =>
@@ -37,6 +40,27 @@ export const useCarritoStore = create((set) => ({
       items: state.items.filter((item) => item.id !== id),
     })),
 
+    
+  // Disminuye la cantidad de un producto
+  disminuirCantidad: (id) =>
+    set((state) => ({
+      items: state.items
+        .map((item) =>
+          item.id === id
+            ? { ...item, cantidad: item.cantidad - 1 }
+            : item
+        )
+        // Si la cantidad llega a cero, quitamos el producto
+        .filter((item) => item.cantidad > 0),
+    })),
+
+
   // Elimina todos los productos del carrito
   vaciarCarrito: () => set({ items: [] }),
-}))
+}),
+    {
+      name: 'carrito-compras',
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+)

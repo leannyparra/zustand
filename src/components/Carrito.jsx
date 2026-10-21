@@ -11,6 +11,10 @@ function Carrito() {
     (state) => state.vaciarCarrito
   )
 
+  const disminuirCantidad = useCarritoStore(
+  (state) => state.disminuirCantidad
+)
+
   // Calculamos el total a pagar
   const total = items.reduce(
     (suma, item) => suma + item.precio * item.cantidad,
@@ -36,18 +40,40 @@ function Carrito() {
         <div key={item.id} className="fila">
           <div>
             <p className="fila-nombre">{item.nombre}</p>
+
+            
             <p className="fila-detalle">
-              {item.cantidad} x $
-              {item.precio.toLocaleString('es-CO')}
+            Precio: ${item.precio.toLocaleString('es-CO')}
             </p>
+
+            <p className="fila-detalle">
+            Cantidad: {item.cantidad}
+            </p>
+
+            <p className="fila-detalle">
+            Subtotal: $
+            {(item.precio * item.cantidad).toLocaleString('es-CO')}
+            </p>
+
           </div>
 
-          <button
-            className="btn btn-secundario"
-            onClick={() => eliminarProducto(item.id)}
-          >
-            Quitar
-          </button>
+
+            <div>
+            <button
+                className="btn btn-secundario"
+                onClick={() => disminuirCantidad(item.id)}
+            >
+                −
+            </button>
+
+            <button
+                className="btn btn-secundario"
+                onClick={() => eliminarProducto(item.id)}
+            >
+                Quitar
+            </button>
+            </div>
+
         </div>
       ))}
 
